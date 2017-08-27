@@ -30,6 +30,8 @@ public class FloatValueView {
     private Rect rect = new Rect();
     private RectF rectF = new RectF();
 
+    private Paint.FontMetricsInt fontMetricsInt;
+
     public FloatValueView(Context context, int parentWidth, int parentHeight) {
         this.context = context;
 
@@ -37,13 +39,15 @@ public class FloatValueView {
         floatViewPaint.setAntiAlias(true);
         floatViewPaint.setTextSize(DensityUtil.dp2px(context, 15));
 
+        fontMetricsInt = floatViewPaint.getFontMetricsInt();
+
         this.parentWidth = parentWidth; // View宽度，用来判断是否超出绘制边界
         this.parentHeight = parentHeight; // View高度，同上
         this.triangleWidth = DensityUtil.dp2px(context, 6); // 三角形的宽度
         this.triangleHeight = DensityUtil.dp2px(context, 4); // 三角形的高度
     }
 
-    public void attachValueView(ValueView valueView)  {
+    public void attachValueView(ValueView valueView) {
         value = String.valueOf(valueView.getValue());
         floatViewPaint.getTextBounds(value, 0, value.length(), rect); // 计算所绘制文本的长宽信息
 
@@ -103,9 +107,10 @@ public class FloatValueView {
         floatViewPaint.setStyle(Paint.Style.FILL);
         floatViewPaint.setColor(TEXT_COLOR);
         floatViewPaint.setTextAlign(Paint.Align.LEFT);
+
         canvas.drawText(value,
                 rectF.left + (rectF.width() - rect.width()) / 2,
-                rectF.top + rectF.height() / 2 + rect.height() / 2,
+                rectF.top + rectF.height() / 2 - (fontMetricsInt.top + fontMetricsInt.bottom) / 2,
                 floatViewPaint);
     }
 }
