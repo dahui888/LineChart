@@ -17,16 +17,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         chartView = (LineChartView) findViewById(R.id.chart_view);
+
         List<String> keys = new ArrayList<>();
-        for (int i = 1; i <= 12; i++) {
+        for (int i = 1; i <= 10; i++) {
             keys.add(i < 10 ? "0" + i : "" + i);
         }
-        chartView.setKeys(keys);
-
-
 
         List<Double> values = new ArrayList<>();
-        values.add(Double.valueOf(2334.12938383));
+        values.add(Double.valueOf(2334.12));
         values.add(Double.valueOf(833.14));
         values.add(Double.valueOf(1452.56));
         values.add(Double.valueOf(223.14));
@@ -38,20 +36,7 @@ public class MainActivity extends AppCompatActivity {
         values.add(Double.valueOf(790.14));
         values.add(Double.valueOf(23.14));
         values.add(Double.valueOf(1934.1342));
-//        values.add(Double.valueOf(223.14));
-//        values.add(Double.valueOf(223.14));
-//        values.add(Double.valueOf(223.14));
-//        values.add(Double.valueOf(223.14));
-//        values.add(Double.valueOf(223.14));
-//        values.add(Double.valueOf(223.14));
-//        values.add(Double.valueOf(223.14));
-//        values.add(Double.valueOf(223.14));
-//        values.add(Double.valueOf(223.14));
-//        values.add(Double.valueOf(223.14));
-//        values.add(Double.valueOf(223.14));
-//        values.add(Double.valueOf(223.14));
-        chartView.setValues(values);
 
-        chartView.work();
+        chartView.workWith(keys, values);
     }
 }

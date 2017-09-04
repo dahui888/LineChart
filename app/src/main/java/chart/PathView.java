@@ -22,8 +22,6 @@ public class PathView {
 
     private float pathLength;
 
-    private float phase;
-
     public PathView(Context context) {
         paint = new Paint();
         paint.setAntiAlias(true);
@@ -55,7 +53,6 @@ public class PathView {
     }
 
     public void setPhase(float phase) {
-        this.phase = phase;
         paint.setPathEffect(new DashPathEffect(new float[]{pathLength, pathLength}, pathLength - pathLength * phase));
     }
 

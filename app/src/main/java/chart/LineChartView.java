@@ -8,7 +8,6 @@ import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Scroller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +57,7 @@ public class LineChartView extends View {
     private boolean isReadyForWork = false, isReadyForDrawAfterAnimation = false;
 
     /**
-     * 当前选中那个 value view 的 index
+     * 当前选中的  value view 的 index
      */
     private int mSelectedIndex;
 
@@ -67,27 +66,14 @@ public class LineChartView extends View {
     }
 
     /**
-     * 设置key集合
-     */
-    public void setKeys(List<String> keys) {
-        if (keys != null && keys.size() != 0) {
-            keyViewList = new ArrayList<>(keys.size());
-            final int count = keys.size();
-            for (int i = 0; i < count; i++) {
-                String key = keys.get(i);
-                KeyView keyView = new KeyView(getContext(), key);
-                keyViewList.add(keyView);
-            }
-        }
-    }
-
-    /**
      * 设置value集合
      */
-    public void setValues(List<Double> values) {
-        if (values != null && values.size() != 0) {
-            valueViewList = new ArrayList<>(values.size());
-            final int count = values.size();
+    public void workWith(List<String> keys, List<Double> values) {
+        if (keys != null && keys.size() != 0 && values != null && values.size() != 0) {
+            final int count = keys.size();
+            keyViewList = new ArrayList<>(count);
+            valueViewList = new ArrayList<>(count);
+
             for (int i = 0; i < count; i++) {
                 if (i == 0) {
                     isAllValueSame = true;
@@ -110,18 +96,24 @@ public class LineChartView extends View {
                 maxValue = Math.max(value.doubleValue(), maxValue);
             }
             for (int i = 0; i < count; i++) {
+                String key = keys.get(i);
+                KeyView keyView = new KeyView(getContext(), key);
+                keyViewList.add(keyView);
+
                 Double value = values.get(i);
                 ValueView point = new ValueView(getContext(), value);
                 valueViewList.add(point);
             }
         }
+
+        work();
     }
 
     /**
      * 开始绘制折线图
      */
-    public void work() {
-        post(new Runnable() {
+    private void work() {
+        postDelayed(new Runnable() {
             @Override
             public void run() {
                 isReadyForWork = true;
@@ -132,6 +124,7 @@ public class LineChartView extends View {
                 hLine = new HorizontalLine(getContext(), width, height);
 
                 final int keyViewCount = keyViewList.size(); // key数量
+
                 int averageWidth = width / keyViewCount; // 每个key可绘制的宽度
                 for (int i = 0; i < keyViewCount; i++) {
                     KeyView keyView = keyViewList.get(i);
@@ -146,8 +139,7 @@ public class LineChartView extends View {
                 final int maxY = getMeasuredHeight() * 6 / 8; // 最小值所在的y坐标，即最大的y坐标
                 final int validHeight = maxY - minY; // 可供绘制的有效区域
                 final double offsetValue = maxValue - minValue; // value最大值和最小值之差
-                final int valueViewCount = valueViewList.size(); // value数量
-                for (int i = 0; i < valueViewCount; i++) {
+                for (int i = 0; i < keyViewCount; i++) {
                     ValueView valueView = valueViewList.get(i);
                     int centerX = averageWidth / 2 + i * averageWidth;
                     // 这里参照最小值所在的y坐标
@@ -160,9 +152,9 @@ public class LineChartView extends View {
                     valueView.setCenter(centerX, centerY); // 循环遍历，设置每个value的绘制起点
                 }
 
-                final int last = keyViewCount - 1;
+                final int lastKey = keyViewCount - 1;
 
-                ValueView valueView = valueViewList.get(last);
+                ValueView valueView = valueViewList.get(lastKey);
                 verticalDashesLine = new VerticalDashesLine(getContext());
                 verticalDashesLine.setPoints(valueView.centerX,
                         valueView.centerY,
@@ -175,15 +167,15 @@ public class LineChartView extends View {
                 pathView = new PathView(getContext()); // 创建折线
                 pathView.lineValueViews(valueViewList); // 折线连接每个value
 
-                mSelectedIndex = last;
+                mSelectedIndex = lastKey;
 
                 startAnimationPath();
             }
-        });
+        }, 500);
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(final Canvas canvas) {
         if (isReadyForWork) {
             if (hLine != null) {
                 hLine.draw(canvas);
@@ -228,7 +220,7 @@ public class LineChartView extends View {
                 invalidate();
             }
         });
-        animator.setDuration(2000);
+        animator.setDuration(4000);
         animator.start();
     }
 
@@ -239,8 +231,8 @@ public class LineChartView extends View {
             int y = (int) event.getY();
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    final int valueViewCount = valueViewList.size();
-                    for (int i = 0; i < valueViewCount; i++) {
+                    final int count = keyViewList.size();
+                    for (int i = 0; i < count; i++) {
                         ValueView valueView = valueViewList.get(i);
                         if (valueView.isTouched(x, y) && mSelectedIndex != i) {
                             mSelectedIndex = i;
@@ -252,7 +244,7 @@ public class LineChartView extends View {
                                     getMeasuredHeight() - DensityUtil.dp2px(getContext(), 20));
 
                             floatValueView = new FloatValueView(getContext(), getWidth(), getHeight());
-                            if (mSelectedIndex == valueViewCount - 1) {
+                            if (mSelectedIndex == count - 1) {
                                 floatValueView.attachValueView(valueView);
                             } else {
                                 floatValueView.attachValueView(valueView);
@@ -262,9 +254,6 @@ public class LineChartView extends View {
                             break;
                         }
                     }
-                    break;
-                case MotionEvent.ACTION_MOVE:
-
                     break;
             }
         }

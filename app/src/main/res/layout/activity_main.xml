@@ -8,6 +8,7 @@
 
     <chart.LineChartView
         android:id="@+id/chart_view"
+        android:background="#eeeeeeee"
         android:layout_width="400dp"
         android:layout_height="200dp"
         android:layout_centerInParent="true"

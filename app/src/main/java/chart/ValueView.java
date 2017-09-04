@@ -55,7 +55,7 @@ public class ValueView {
 
     public boolean isTouched(int x, int y) {
         int innerX = Math.abs(x - centerX);
-//        int innerY = Math.abs(y - center.y);
+//        int innerY = Math.abs(y - centerY);
         return rect.left < innerX && innerX < rect.right; // 只判断x坐标范围
 //        return rect.contains(innerX, innerY);
     }

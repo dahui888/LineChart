@@ -13,16 +13,11 @@ import android.graphics.Path;
 
 public class VerticalDashesLine {
 
-    private Context context;
-
     private Paint paint;
 
     private Path path;
 
     public VerticalDashesLine(Context context) {
-
-        this.context = context;
-
         paint = new Paint();
         paint.setAntiAlias(true);
         paint.setColor(Color.parseColor("#ff4040"));
