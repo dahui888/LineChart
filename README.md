@@ -1,1 +1,63 @@
 # 自定义收益折线图，效果超赞
+
+<image src="./image/line_chart.gif" />
+
+**布局中使用**
+
+```
+    <com.example.simpletabindicator.SimpleTabIndicator
+        android:id="@+id/tab_indicator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffcccc"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        app:sti_followPageScrolled="true"
+        app:sti_tabColor="#ff0000"
+        app:sti_tabHeight="4dp"
+        app:sti_tabTopPadding="15dp"
+        app:sti_tabWidthPercent="0.8"
+        app:sti_titleColor="#ff0000"
+        app:sti_titleSize="20dp" />
+```
+
+**代码中使用**
+```java
+String[] titles = {"云", "天河", "云天河", "小云云"};
+
+indicator = (SimpleTabIndicator) findViewById(R.id.tab_indicator);
+viewPager = (ViewPager) findViewById(R.id.view_pager);
+
+// 跟随ViewPager联动
+indicator.setViewPager(viewPager, titles);
+viewPager.setAdapter(new MyAdapter(getSupportFragmentManager(), Arrays.asList(titles)));
+  
+// 不跟随ViewPager联动
+indicator.setOnTabChangedListener(new SimpleTabIndicator.OnTabChangedListener() {
+    @Override
+    public void onTabChanged(int currentTab) {
+        viewPager.setCurrentItem(currentTab); 
+    }
+});
+
+viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+         indicator.setCurrentTab(position, true);
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
+});
+```
+
+# 如何联系我：
+
+QQ：129830085，QQ群：83936534

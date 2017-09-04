@@ -10,13 +10,12 @@ import chart.LineChartView;
 
 public class MainActivity extends AppCompatActivity {
 
-    LineChartView chartView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        chartView = (LineChartView) findViewById(R.id.chart_view);
+
+        LineChartView chartView = (LineChartView) findViewById(R.id.chart_view);
 
         List<String> keys = new ArrayList<>();
         for (int i = 1; i <= 10; i++) {
@@ -37,6 +36,6 @@ public class MainActivity extends AppCompatActivity {
         values.add(Double.valueOf(23.14));
         values.add(Double.valueOf(1934.1342));
 
-        chartView.workWith(keys, values);
+        chartView.workWith(keys, values); // 调用workWith方法
     }
 }
