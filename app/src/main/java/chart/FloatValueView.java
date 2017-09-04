@@ -51,8 +51,8 @@ public class FloatValueView {
         value = String.valueOf(valueView.getValue());
         floatViewPaint.getTextBounds(value, 0, value.length(), rect); // 计算所绘制文本的长宽信息
 
-        int centerX = valueView.getCenter().x; // 圆点圆心坐标 (x, y)
-        int centerY = valueView.getCenter().y;
+        int centerX = valueView.centerX; // 圆点圆心坐标 (x, y)
+        int centerY = valueView.centerY;
 
         float left = centerX // 圆点圆心x坐标
                 - rect.width() / 2 // 文字一半宽度
@@ -97,19 +97,19 @@ public class FloatValueView {
     public void draw(Canvas canvas) {
         floatViewPaint.setColor(BORDER_COLOR);
         floatViewPaint.setStyle(Paint.Style.STROKE);
-        floatViewPaint.setStrokeWidth(DensityUtil.dp2px(context, 3));
+        floatViewPaint.setStrokeWidth(DensityUtil.dp2px(context, 2));
         canvas.drawPath(path, floatViewPaint);
 
         floatViewPaint.setColor(BACKGROUND);
         floatViewPaint.setStyle(Paint.Style.FILL);
         canvas.drawPath(path, floatViewPaint);
 
-        floatViewPaint.setStyle(Paint.Style.FILL);
         floatViewPaint.setColor(TEXT_COLOR);
-        floatViewPaint.setTextAlign(Paint.Align.LEFT);
+        floatViewPaint.setStyle(Paint.Style.FILL);
+        floatViewPaint.setTextAlign(Paint.Align.CENTER);
 
         canvas.drawText(value,
-                rectF.left + (rectF.width() - rect.width()) / 2,
+                rectF.left + rectF.width() / 2,
                 rectF.top + rectF.height() / 2 - (fontMetricsInt.top + fontMetricsInt.bottom) / 2,
                 floatViewPaint);
     }

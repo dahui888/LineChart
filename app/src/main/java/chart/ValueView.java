@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.Rect;
 
 /**
@@ -17,18 +16,16 @@ public class ValueView {
 
     private Rect rect;
 
-    private Point center;
-
-    private int radius;
+    public int centerX, centerY;
 
     private double value;
+
+    private int radius;
 
     public ValueView(Context context, double value) {
 
         valuePaint.setAntiAlias(true);
         valuePaint.setColor(Color.parseColor("#ff4040"));
-        valuePaint.setTextSize(DensityUtil.dp2px(context, 10));
-
         radius = DensityUtil.dp2px(context, 4);
 
         this.value = value;
@@ -47,8 +44,9 @@ public class ValueView {
     }
 
     public void setCenter(int centerX, int centerY) {
-        center = new Point(centerX, centerY);
-        rect = new Rect(-radius, -radius, radius * 2 + radius, radius * 2 + radius);
+        this.centerX = centerX;
+        this.centerY = centerY;
+        rect = new Rect(-radius * 2, -radius * 2, radius * 2 + radius * 2, radius * 2 + radius * 2);
     }
 
     public double getValue() {
@@ -56,18 +54,14 @@ public class ValueView {
     }
 
     public boolean isTouched(int x, int y) {
-        int innerX = Math.abs(x - center.x);
+        int innerX = Math.abs(x - centerX);
 //        int innerY = Math.abs(y - center.y);
         return rect.left < innerX && innerX < rect.right; // 只判断x坐标范围
 //        return rect.contains(innerX, innerY);
     }
 
-    public Point getCenter() {
-        return center;
-    }
-
     public void draw(Canvas canvas) {
-        canvas.drawCircle(center.x, center.y, radius, valuePaint);
+        canvas.drawCircle(centerX, centerY, radius, valuePaint);
     }
 
 }
