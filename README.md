@@ -4,58 +4,48 @@
 
 **布局中使用**
 
-```
-    <com.example.simpletabindicator.SimpleTabIndicator
-        android:id="@+id/tab_indicator"
+```xml
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/activity_main"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#ffcccc"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp"
-        app:sti_followPageScrolled="true"
-        app:sti_tabColor="#ff0000"
-        app:sti_tabHeight="4dp"
-        app:sti_tabTopPadding="15dp"
-        app:sti_tabWidthPercent="0.8"
-        app:sti_titleColor="#ff0000"
-        app:sti_titleSize="20dp" />
+        android:layout_height="match_parent"
+        tools:context="com.example.linechart.MainActivity">
+    
+        <chart.LineChartView
+            android:id="@+id/chart_view"
+            android:background="#eeeeeeee"
+            android:layout_width="400dp"
+            android:layout_height="200dp"
+            android:layout_centerInParent="true"
+            android:text="Hello World!" />
+    </RelativeLayout>
 ```
 
 **代码中使用**
 ```java
-String[] titles = {"云", "天河", "云天河", "小云云"};
+        LineChartView chartView = (LineChartView) findViewById(R.id.chart_view);
 
-indicator = (SimpleTabIndicator) findViewById(R.id.tab_indicator);
-viewPager = (ViewPager) findViewById(R.id.view_pager);
+        List<String> keys = new ArrayList<>();
+        for (int i = 1; i <= 10; i++) {
+            keys.add(i < 10 ? "0" + i : "" + i);
+        }
 
-// 跟随ViewPager联动
-indicator.setViewPager(viewPager, titles);
-viewPager.setAdapter(new MyAdapter(getSupportFragmentManager(), Arrays.asList(titles)));
-  
-// 不跟随ViewPager联动
-indicator.setOnTabChangedListener(new SimpleTabIndicator.OnTabChangedListener() {
-    @Override
-    public void onTabChanged(int currentTab) {
-        viewPager.setCurrentItem(currentTab); 
-    }
-});
+        List<Double> values = new ArrayList<>();
+        values.add(Double.valueOf(2334.12));
+        values.add(Double.valueOf(833.14));
+        values.add(Double.valueOf(1452.56));
+        values.add(Double.valueOf(223.14));
+        values.add(Double.valueOf(631.14));
+        values.add(Double.valueOf(23.14));
+        values.add(Double.valueOf(563.14));
+        values.add(Double.valueOf(1523.14));
+        values.add(Double.valueOf(223.14));
+        values.add(Double.valueOf(790.14));
+        values.add(Double.valueOf(23.14));
+        values.add(Double.valueOf(1934.1342));
 
-viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                
-    }
-
-    @Override
-    public void onPageSelected(int position) {
-         indicator.setCurrentTab(position, true);
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int state) {
-
-    }
-});
+        chartView.workWith(keys, values); // 调用workWith方法
 ```
 
 # 如何联系我：
