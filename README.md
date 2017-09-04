@@ -17,8 +17,7 @@
             android:background="#eeeeeeee"
             android:layout_width="400dp"
             android:layout_height="200dp"
-            android:layout_centerInParent="true"
-            android:text="Hello World!" />
+            android:layout_centerInParent="true" />
     </RelativeLayout>
 ```
 
